@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FEMD TORNEOS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class', // Enable class-based dark mode
+        theme: {
+          extend: {
+            // Your theme extensions here...
+          }
+        }
+      }
+    </script>
+    <style>
+      /* Light theme scrollbar */
+      :root {
+        --scrollbar-track: #f1f5f9; /* bg-slate-100 */
+        --scrollbar-thumb: #94a3b8; /* bg-slate-400 */
+        --scrollbar-thumb-hover: #64748b; /* bg-slate-500 */
+      }
+      /* Dark theme scrollbar */
+      :root.dark {
+        --scrollbar-track: #1f2937; /* bg-gray-800 */
+        --scrollbar-thumb: #4b5563; /* bg-gray-600 */
+        --scrollbar-thumb-hover: #6b7280; /* bg-gray-500 */
+      }
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--scrollbar-track);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-thumb);
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--scrollbar-thumb-hover);
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.29.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "@supabase/supabase-js": "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
+    "@supabase/storage-js": "https://aistudiocdn.com/@supabase/storage-js@^2.80.0"
+  }
+}
+</script>
+</head>
+  <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,7 @@
+{
+  "name": "FEMD TORNEOS",
+  "description": "Una web espectacular, moderna y funcional para una empresa organizadora de eventos y torneos de fútbol, con un blog, registro de usuarios y un panel de administración avanzado impulsado por Gemini AI.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
