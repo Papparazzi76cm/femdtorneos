@@ -54,8 +54,7 @@ const HomePage: React.FC<HomePageProps> = ({ onPostSelect, onNavigate }) => {
     
     const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
     const [isLoadingGallery, setIsLoadingGallery] = useState(true);
-    const [galleryError, setGalleryError] = useState<string | null>(null);
-
+    
     const [activeIndex, setActiveIndex] = useState(0);
     const [heroSlideIndex, setHeroSlideIndex] = useState(0);
 
@@ -88,27 +87,25 @@ const HomePage: React.FC<HomePageProps> = ({ onPostSelect, onNavigate }) => {
         };
         fetchPosts();
     }, []);
-    
+
     useEffect(() => {
         const fetchGalleryImages = async () => {
             setIsLoadingGallery(true);
-            setGalleryError(null);
             try {
                 const files = await storageService.listFiles('carteles');
                 const images = files.map(file => ({
-                    id: file.id,
+                    id: file.id ?? file.name,
                     src: storageService.getPublicUrl('carteles', file.name),
-                    alt: file.name.split('.')[0].replace(/[-_]/g, ' '), // Clean up alt text
+                    alt: file.name.split('.').slice(0, -1).join(' ').replace(/[-_]/g, ' '),
                 }));
                 setGalleryImages(images);
-            } catch (error: any) {
-                console.error("Failed to fetch gallery images:", error.message);
-                setGalleryError("No se pudieron cargar las imágenes de la galería. Por favor, asegúrate de que el bucket 'carteles' esté configurado correctamente.");
+            } catch (error) {
+                console.error("Failed to fetch gallery images:", error);
+                // The message will be shown in the gallery section if empty
             } finally {
                 setIsLoadingGallery(false);
             }
         };
-
         fetchGalleryImages();
     }, []);
     
@@ -123,7 +120,7 @@ const HomePage: React.FC<HomePageProps> = ({ onPostSelect, onNavigate }) => {
     }, [allPosts]);
 
     const totalImages = galleryImages.length;
-    const anglePerItem = 360 / totalImages;
+    const anglePerItem = totalImages > 0 ? 360 / totalImages : 0;
     const radius = "clamp(250px, 30vw, 350px)"; 
 
     const handlePrev = () => {
@@ -223,9 +220,9 @@ const HomePage: React.FC<HomePageProps> = ({ onPostSelect, onNavigate }) => {
                     </h2>
                     
                     {isLoadingGallery ? (
-                        <p className="text-gray-500 dark:text-gray-400">Cargando galería...</p>
-                    ) : galleryError ? (
-                        <p className="text-red-500 dark:text-red-400">{galleryError}</p>
+                        <div className="h-[500px] flex items-center justify-center">
+                           <p className="text-gray-500 dark:text-gray-400">Cargando galería...</p>
+                        </div>
                     ) : totalImages > 0 ? (
                         <div className="relative w-full h-[500px] md:h-[600px] flex items-center justify-center">
                             <div className="w-full h-full" style={{ perspective: '1500px' }}>
@@ -282,7 +279,9 @@ const HomePage: React.FC<HomePageProps> = ({ onPostSelect, onNavigate }) => {
                             )}
                         </div>
                     ) : (
-                        <p className="text-gray-500 dark:text-gray-400">No hay carteles para mostrar. Súbelos desde el Panel de Administración en "Gestor de Archivos" &gt; "Carteles".</p>
+                        <div className="h-[500px] flex items-center justify-center">
+                             <p className="text-gray-500 dark:text-gray-400">No hay carteles para mostrar. Súbelos desde el Panel de Administración en "Gestor de Archivos" &gt; "Carteles".</p>
+                        </div>
                     )}
                 </div>
             </div>

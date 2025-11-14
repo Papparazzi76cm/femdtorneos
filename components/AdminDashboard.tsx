@@ -73,14 +73,29 @@ Para solucionarlo:
         if (!file) return;
 
         setIsUploading(true);
+        setError(null); // Clear previous errors on new upload attempt
         try {
             await storageService.uploadFile(bucketId, file);
             await loadFiles(); // Refresh file list
-        } catch (error) {
-            alert((error as Error).message);
+        } catch (e: any) {
+            const err = e as Error;
+            console.error(`Error uploading file to ${bucketId}:`, err);
+            if (err.message.toLowerCase().includes('bucket not found')) {
+                const bucketInstructions = `El bucket de almacenamiento "${bucketId}" no se ha encontrado.
+
+Para solucionarlo:
+1. Ve a la sección 'Storage' de tu proyecto Supabase.
+2. Haz clic en 'New Bucket'.
+3. Introduce el nombre del bucket: ${bucketId}
+4. Asegúrate de que la opción 'Public bucket' está activada.
+5. Haz clic en 'Create Bucket'.`;
+                setError(bucketInstructions);
+            } else {
+                alert(`Error al subir el archivo: ${err.message}`);
+            }
         } finally {
             setIsUploading(false);
-            if(fileInputRef.current) {
+            if (fileInputRef.current) {
                 fileInputRef.current.value = "";
             }
         }
